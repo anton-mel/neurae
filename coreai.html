@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoreAI — Stop Seizures Before They Spread</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #090909;
+      --bg2:     #111111;
+      --bg3:     #161616;
+      --border:  #202020;
+      --text:    #f0f0f0;
+      --muted:   #888;
+      --dim:     #555;
+      --accent:  #ff6b35;
+      --accent2: #e85d25;
+      --green:   #22c55e;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 58px;
+      background: rgba(9,9,9,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--text); }
+    .nav-links { display: flex; gap: 30px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .nav-cta:hover { background: var(--accent2); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -250px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(ellipse, rgba(255,107,53,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.25);
+      color: var(--accent); font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 100px; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 32px;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+
+    .hero h1 { font-size: clamp(42px,7vw,82px); font-weight: 900; line-height: 1.04; letter-spacing: -2.5px; max-width: 920px; margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: clamp(16px,2vw,20px); color: var(--muted); max-width: 580px; line-height: 1.7; margin-bottom: 48px; }
+
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 72px; }
+    .btn-primary { background: var(--accent); color: #fff; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; transition: background .2s, transform .1s; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); transition: border-color .2s, transform .1s; }
+    .btn-secondary:hover { border-color: #444; transform: translateY(-1px); }
+
+    /* ─── METRICS ─── */
+    .metrics { display: flex; justify-content: center; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; max-width: 900px; width: 100%; }
+    .metric { flex: 1; min-width: 150px; padding: 24px 24px; border-right: 1px solid var(--border); background: var(--bg2); }
+    .metric:last-child { border-right: none; }
+    .metric-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .metric-label { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ─── SECTION SHARED ─── */
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 96px 0; }
+    .section-tag { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .section-title { font-size: clamp(28px,4vw,50px); font-weight: 800; letter-spacing: -1.2px; line-height: 1.08; margin-bottom: 16px; }
+    .section-sub { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 52px; }
+
+    /* ─── DEMO ─── */
+    .demo-wrapper { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .demo-topbar { display: flex; align-items: center; gap: 8px; padding: 13px 20px; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    .demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .demo-dot.r { background: #ff5f57; } .demo-dot.y { background: #febc2e; } .demo-dot.g { background: #28c840; }
+    .demo-titlebar { flex: 1; text-align: center; font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* Side-by-side chip images */
+    .chip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #0d0d0d; }
+    .chip-pair-img { position: relative; overflow: hidden; }
+    .chip-pair-img img { width: 100%; height: 380px; object-fit: cover; display: block; }
+    .chip-pair-img .img-label {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(8px);
+      padding: 5px 10px; border-radius: 5px; font-size: 11px; color: #aaa; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .chip-pair-img:first-child { border-right: 1px solid var(--border); }
+
+    .callouts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+    .callout { background: var(--bg2); padding: 20px 24px; }
+    .callout-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    .callout-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─── HOW IT WORKS ─── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .step { background: var(--bg2); padding: 34px 30px; }
+    .step-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .step h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+    .step p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── SILICON TWO-COL ─── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    @media(max-width:768px){ .two-col { grid-template-columns: 1fr; } }
+
+    .photo-card { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); background: #000; position: relative; }
+    .photo-card img { width: 100%; display: block; }
+    .photo-card .photo-label {
+      position: absolute; bottom: 14px; left: 14px;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+      padding: 6px 12px; border-radius: 6px; font-size: 11px; color: var(--muted); font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table tr { border-bottom: 1px solid var(--border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td { padding: 14px 0; font-size: 14px; }
+    .spec-table td:first-child { color: var(--muted); font-weight: 500; }
+    .spec-table td:last-child { color: var(--text); font-weight: 700; text-align: right; }
+
+    /* ─── PACKAGED DEVICE ─── */
+    .package-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:768px){ .package-grid { grid-template-columns: 1fr; } }
+
+    .package-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .package-card img { width: 100%; height: 260px; object-fit: cover; display: block; }
+    .package-card .card-body { padding: 20px 22px; }
+    .package-card .card-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .package-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .package-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ─── IN-VIVO ─── */
+    .invivo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:768px){ .invivo-layout { grid-template-columns: 1fr; } }
+
+    .invivo-left { display: flex; flex-direction: column; gap: 16px; }
+
+    .lab-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .lab-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .lab-card .card-body { padding: 18px 20px; }
+    .lab-card .card-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    .lab-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    .rat-card { background: var(--bg2); border: 1px solid rgba(255,107,53,0.25); border-radius: 12px; overflow: hidden; position: relative; }
+    .rat-card img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 456px; }
+    .rat-card .rat-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.88));
+      padding: 32px 24px 24px;
+    }
+    .rat-card .rat-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.35);
+      color: var(--green); font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 100px; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .rat-card .rat-badge .dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    .rat-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.4px; }
+    .rat-card p { font-size: 13px; color: #aaa; line-height: 1.55; }
+
+    /* ─── USE CASES ─── */
+    .use-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px,1fr)); gap: 16px; }
+    .use-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 30px; transition: border-color .2s; }
+    .use-card:hover { border-color: rgba(255,107,53,0.3); }
+    .use-icon { font-size: 26px; margin-bottom: 14px; }
+    .use-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+    .use-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── RESEARCH ─── */
+    .research-bar {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 28px 36px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    }
+    .ri-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .ri-divider { width: 1px; height: 36px; background: var(--border); }
+    .pub-item { display: flex; flex-direction: column; gap: 2px; }
+    .pub-name { font-size: 14px; font-weight: 700; }
+    .pub-conf { font-size: 12px; color: var(--muted); }
+
+    /* ─── POSTER RESULTS ─── */
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 40px; }
+    .result-item { background: var(--bg2); padding: 28px 24px; }
+    .result-value { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; color: var(--text); line-height: 1; margin-bottom: 6px; }
+    .result-value span { color: var(--accent); }
+    .result-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* ─── CTA ─── */
+    .cta-section { text-align: center; padding: 100px 24px; border-top: 1px solid var(--border); }
+    .cta-section h2 { font-size: clamp(30px,5vw,56px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 16px; }
+    .cta-section p { font-size: 18px; color: var(--muted); margin-bottom: 40px; }
+    .email-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 480px; margin: 0 auto; }
+    .email-form input { flex: 1; min-width: 230px; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 8px; font-size: 15px; outline: none; font-family: inherit; transition: border-color .2s; }
+    .email-form input:focus { border-color: var(--accent); }
+    .email-form input::placeholder { color: var(--muted); }
+    .email-form button { background: var(--accent); color: #fff; border: none; padding: 14px 26px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background .2s; }
+    .email-form button:hover { background: var(--accent2); }
+
+    /* ─── FOOTER ─── */
+    footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    footer .f-logo { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
+    footer .f-logo span { color: var(--text); }
+    footer .f-copy { font-size: 13px; color: var(--muted); }
+    footer .f-links { display: flex; gap: 24px; }
+    footer .f-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    footer .f-links a:hover { color: var(--text); }
+
+    @media(max-width:640px){
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .callouts { grid-template-columns: 1fr; }
+      .chip-pair { grid-template-columns: 1fr; }
+      .chip-pair-img img { height: 240px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Core<span>AI</span></a>
+  <ul class="nav-links">
+    <li><a href="#product">Product</a></li>
+    <li><a href="#floorplan">Architecture</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#silicon">Silicon</a></li>
+    <li><a href="#invivo">In-Vivo</a></li>
+    <li><a href="#research">Research</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Request Access</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> In-vivo rodent trials ongoing · Yale School of Medicine</div>
+  <h1>Stop seizures<br /><em>before they spread.</em></h1>
+  <p class="hero-sub">
+    CoreAI is an implantable brain-computer interface chip that detects, predicts, and arrests epileptic seizures in real time — entirely on-device, no cloud, no wires.
+  </p>
+  <div class="hero-actions">
+    <a href="#product" class="btn-primary">See the Chip</a>
+    <a href="#invivo" class="btn-secondary">View Animal Studies</a>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-value">&lt;10ms</div><div class="metric-label">Seizure arrest latency</div></div>
+    <div class="metric"><div class="metric-value">&lt;15mW</div><div class="metric-label">Per-implant power</div></div>
+    <div class="metric"><div class="metric-value">506 Mbps</div><div class="metric-label">Neural throughput</div></div>
+    <div class="metric"><div class="metric-value">12nm</div><div class="metric-label">CMOS process</div></div>
+    <div class="metric"><div class="metric-value">96%+</div><div class="metric-label">Detection fidelity</div></div>
+    <div class="metric"><div class="metric-value">1.2ms</div><div class="metric-label">Compute / 4KB packet</div></div>
+  </div>
+</div>
+
+<!-- PRODUCT DEMO -->
+<section id="product">
+  <div class="wrap">
+    <div class="section-tag">The Chip</div>
+    <h2 class="section-title">Designed from silicon up<br />for seizure intelligence.</h2>
+    <p class="section-sub">
+      A hardware-accelerator-rich processor co-designed for implantable neural processing. Taped out in 12nm CMOS. Every block purpose-built for real-time BCI.
+    </p>
+
+    <div class="demo-wrapper">
+      <div class="demo-topbar">
+        <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        <div class="demo-titlebar">CoreAI · 12nm CMOS · Production Tape-out</div>
+      </div>
+
+      <div class="chip-pair">
+        <div class="chip-pair-img">
+          <img src="/Users/antonmelnychuk/.claude/image-cache/9f0e0228-423d-4872-a278-e810e60a282f/1.png" alt="CoreAI chips on wafer tray" />
+          <div class="img-label">Chip tray · Post tape-out</div>
+        </div>
+        <div class="chip-pair-img">
+          <img src="/Users/antonmelnychuk/Desktop/halo.avif" alt="CoreAI single die under microscope" />
+          <div class="img-label">Single die · Under microscope · &lt;1mm²</div>
+        </div>
+      </div>
+
+      <div class="callouts">
+        <div class="callout">
+          <div class="callout-label">Neural Accelerators</div>
+          <div class="callout-desc">MA, RC, FFT, SVM, and BBF processing elements in independent GALS clock domains — power scales with workload, not chip speed.</div>
+        </div>
+        <div class="callout">
+          <div class="callout-label">AES-128 Encryption</div>
+          <div class="callout-desc">On-chip hardware encryption keeps all neural data secure before UWB wireless transmission. HIPAA and NIST compliant.</div>
+        </div>
+        <div class="callout">
+          <div class="callout-label">RISC-V Controller</div>
+          <div class="callout-desc">Embedded RISC-V microcontroller dynamically reconfigures accelerator pipelines for any BCI application without reflashing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOORPLAN -->
+<section id="floorplan" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-tag">Architecture</div>
+    <h2 class="section-title">Every accelerator block,<br />purpose-built.</h2>
+    <p class="section-sub">
+      The CoreAI chip floorplan maps each hardware processing element — MA, RC, LZ, AES, RISC-V — to a dedicated spatial region, enabling independent clock domains and aggressive power gating per module.
+    </p>
+
+    <div class="demo-wrapper">
+      <div class="demo-topbar">
+        <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        <div class="demo-titlebar">CoreAI · Chip Floorplan · Accelerator Block Layout</div>
+      </div>
+      <div style="background:#0d0d0d; padding: 32px;">
+        <img src="/Users/antonmelnychuk/.claude/image-cache/9f0e0228-423d-4872-a278-e810e60a282f/8.png"
+             alt="CoreAI chip floorplan with labeled accelerator blocks"
+             style="width:100%; display:block; border-radius:8px;" />
+      </div>
+      <div class="callouts">
+        <div class="callout">
+          <div class="callout-label">MA · Memory Accumulator</div>
+          <div class="callout-desc">Largest block by area. Handles cross-correlation and signal similarity kernels — the core of seizure propagation analysis.</div>
+        </div>
+        <div class="callout">
+          <div class="callout-label">LZ · Compression</div>
+          <div class="callout-desc">LZ4 / LZMA lossless compression reduces radio transmission bandwidth by up to 40%, extending battery life per implant.</div>
+        </div>
+        <div class="callout">
+          <div class="callout-label">AES · Encryption</div>
+          <div class="callout-desc">AES-128 hardware block encrypts neural data before wireless transmission. Compliant with HIPAA, NIST, and NSA key-length standards.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">End-to-end seizure pipeline,<br />entirely on-chip.</h2>
+    <p class="section-sub">CoreAI runs the full detection-to-stimulation loop across multiple distributed brain sites — under 10ms, fully autonomous.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Sense</h3>
+        <p>96-channel ECoG electrode arrays digitize cortical signals at 30 KHz, 16-bit resolution. 46 Mbps raw neural data per node, sampled continuously.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Filter &amp; Hash</h3>
+        <p>Non-linear Energy Operator (NEO) extraction + locality-sensitive hashing filters signal candidates across implant sites, cutting inter-node communication by 100×.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Detect &amp; Predict</h3>
+        <p>FFT, cross-correlation (XCOR), and SVM classifiers run in parallel to detect seizure onset. Signal similarity analysis forecasts propagation paths across brain regions.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Arrest</h3>
+        <p>Charge-balanced biphasic stimulation pulses are delivered to electrodes in anticipating regions within 10ms — disrupting cortical synchrony before the seizure spreads.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IN-VIVO STUDIES -->
+<section id="invivo" style="padding-top:0;min-height:100vh;display:flex;align-items:center;">
+  <div class="wrap" style="width:100%;">
+    <div class="two-col">
+      <div style="border-radius:12px;overflow:hidden;background:#f5f5f5;border:1px solid #e8e8e8;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="/Users/antonmelnychuk/.claude/image-cache/296fb011-ab4b-4d7d-8cbc-2017f5c4c1a5/7.png" alt="Rat with cortical implant - MD-Eid#4b" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;" />
+      </div>
+      <div>
+        <div class="section-tag">In-Vivo Studies</div>
+        <h2 class="section-title">Meet our<br />first patient!</h2>
+        <p class="section-sub">Validated at Yale School of Medicine using a custom closed-loop recording and stimulation toolchain.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" style="display:inline-flex;align-items:center;background:#000;border:1px solid #000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">See Results</button>
+          <button onclick="document.getElementById('invivo-modal').style.display='flex'" style="display:inline-flex;align-items:center;background:transparent;border:1px solid rgba(0,0,0,0.2);color:#000;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.05)';this.style.borderColor='rgba(0,0,0,0.4)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(0,0,0,0.2)'">Technical Specifications</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SILICON -->
+<section id="silicon" style="padding-top:0;min-height:100vh;background:#fff;display:flex;align-items:center;">
+  <div class="wrap" style="width:100%;">
+    <div class="two-col">
+      <div style="border-radius:12px;overflow:hidden;background:#f5f5f5;border:1px solid #e8e8e8;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="https://news.yale.edu/sites/default/files/bci-image-03-04_combined.png" alt="Yale BCI chip" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;" />
+      </div>
+      <div>
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">Our Edge</div>
+        <h2 class="section-title" style="color:#000;">We Build Reconfigurable Architecture.</h2>
+        <p class="section-sub" style="margin-bottom:32px;color:rgba(0,0,0,0.5);font-weight:400;line-height:2;">
+          We aim to research and design silicon and packaging solutions that shift from fixed-function to general-purpose architectures, tackling larger amounts of neural throughput under stringent FDA power constraints.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+
+<!-- RESEARCH -->
+<section id="research" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-tag">Research Backing</div>
+
+    <div class="research-bar">
+      <div class="ri-label">Based on</div>
+      <div class="ri-divider"></div>
+      <div class="pub-item">
+        <div class="pub-name">SCALO</div>
+        <div class="pub-conf">ISCA '23 · 50th Intl. Symposium on Computer Architecture</div>
+      </div>
+      <div class="ri-divider"></div>
+      <div class="pub-item">
+        <div class="pub-name">HALO</div>
+        <div class="pub-conf">IEEE Micro · Hardware-Software Co-Designed BCI Processor</div>
+      </div>
+      <div class="ri-divider"></div>
+      <div class="pub-item">
+        <div class="pub-name">Senior Thesis · CPSC 490 / 4900</div>
+        <div class="pub-conf">Yale University · Seizure Treatment BCI · Anton Melnychuk</div>
+      </div>
+      <div class="ri-divider"></div>
+      <div class="pub-item">
+        <div class="pub-name">Yale School of Medicine</div>
+        <div class="pub-conf">Active collaboration · Rodent seizure experiments</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <h2>Ready to stop<br />the next seizure?</h2>
+  <p>We're working with select neurology centers, research labs, and neurotech investors.</p>
+  <div class="email-form">
+    <input type="email" placeholder="you@hospital.org" />
+    <button type="submit">Request Access</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Core<span>AI</span></div>
+  <div class="f-links">
+    <a href="#research">Research</a>
+    <a href="#invivo">Studies</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="f-copy">© 2026 CoreAI, Inc. · Built on Yale BCI Research</div>
+</footer>
+
+<!-- TECH SPEC MODAL -->
+<div id="tech-spec-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:16px;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;padding:40px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <h3 style="color:#fff;font-size:18px;font-weight:600;margin:0;">Technical Specifications</h3>
+      <button onclick="document.getElementById('tech-spec-modal').style.display='none'" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <div style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.75;display:flex;flex-direction:column;gap:20px;">
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Pipeline Overview</strong>Neural recordings from each electrode, implanted directly into brain tissue, are sampled using 16-bit ADCs and transferred from the host computer to the FPGA in Intan-defined, fixed-size, channel-interleaved data blocks. The designed pipeline collects this data using a proprietary RHD format and streams it to the seizure-detection hardware (RTL) implementation under test. The runtime outputs are collected on the host in a timestamp-bounded event format that marks seizure start and end boundaries for further in-vivo verification. Upon detection, charge-balanced biphasic stimulation pulses are delivered back through the implanted electrodes, disrupting cortical synchrony and interrupting the seizure before it generalizes.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Seizure Processing</strong>The RTL implementation decomposes seizure detection into a deeply pipelined, multi-stage datapath optimized for hardware concurrency and per-channel independence. Seizure detection consists of three independent modules (NEO, THR, and GATE) that perform fixed-point arithmetic and threshold evaluation at a single-sample-per-clock throughput per channel. First, each channel maintains a dedicated sliding-window, three-sample history buffer used to compute the nonlinear energy operator (NEO), a signal transformation that highlights transient oscillatory activity associated with seizure onset. Downstream of the configurable threshold (THR), which marks high-oscillation detections, a gating state machine tracks detection persistence over time using configurable transition counters and inactivity windows. This logic converts transient, sample-level detections into temporally bounded seizure events while preserving channel-level isolation. The modular separation between peripheral communication logic and datapath computation allows independent timing closure and facilitates future migration toward an ASIC-based physical design pipeline without a PC in the loop.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Software Stack</strong>We implement a host-side software stack that complements the hardware processing by providing configuration management and post-processing visualization. A graphical user interface enables runtime parameter tuning, batch file processing, and visualization of detection intervals across channels and recording sessions. Hardware-generated event packets are decoded and organized into structured output files that allow cross-referencing between detected seizure regions and raw waveform recordings.</p>
+    </div>
+  </div>
+</div>
+
+<!-- INVIVO MODAL -->
+<div id="invivo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:16px;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;padding:40px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <h3 style="color:#fff;font-size:18px;font-weight:600;margin:0;">Technical Specifications</h3>
+      <button onclick="document.getElementById('invivo-modal').style.display='none'" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <div style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.75;display:flex;flex-direction:column;gap:20px;">
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Pipeline Overview</strong>Neural recordings from each electrode, implanted directly into brain tissue, are sampled using 16-bit ADCs and transferred from the host computer to the FPGA in Intan-defined, fixed-size, channel-interleaved data blocks. The designed pipeline collects this data using a proprietary RHD format and streams it to the seizure-detection hardware (RTL) implementation under test. The runtime outputs are collected on the host in a timestamp-bounded event format that marks seizure start and end boundaries for further in-vivo verification. Upon detection, charge-balanced biphasic stimulation pulses are delivered back through the implanted electrodes, disrupting cortical synchrony and interrupting the seizure before it generalizes.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Seizure Processing</strong>The RTL implementation decomposes seizure detection into a deeply pipelined, multi-stage datapath optimized for hardware concurrency and per-channel independence. Seizure detection consists of three independent modules (NEO, THR, and GATE) that perform fixed-point arithmetic and threshold evaluation at a single-sample-per-clock throughput per channel. First, each channel maintains a dedicated sliding-window, three-sample history buffer used to compute the nonlinear energy operator (NEO), a signal transformation that highlights transient oscillatory activity associated with seizure onset. Downstream of the configurable threshold (THR), which marks high-oscillation detections, a gating state machine tracks detection persistence over time using configurable transition counters and inactivity windows. This logic converts transient, sample-level detections into temporally bounded seizure events while preserving channel-level isolation. The modular separation between peripheral communication logic and datapath computation allows independent timing closure and facilitates future migration toward an ASIC-based physical design pipeline without a PC in the loop.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Software Stack</strong>We implement a host-side software stack that complements the hardware processing by providing configuration management and post-processing visualization. A graphical user interface enables runtime parameter tuning, batch file processing, and visualization of detection intervals across channels and recording sessions. Hardware-generated event packets are decoded and organized into structured output files that allow cross-referencing between detected seizure regions and raw waveform recordings.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
