@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>neurae — Stop Seizures Before They Spread</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #ffffff;
+      --surface:  #f9fafb;
+      --surface2: #f3f4f6;
+      --border:   #e5e7eb;
+      --border2:  #d1d5db;
+      --text:     #111827;
+      --muted:    #6b7280;
+      --dim:      #9ca3af;
+      --accent:   #111827;
+      --blue:     #3b82f6;
+      --green:    #10b981;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 56px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 700; letter-spacing: -0.4px;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo em { font-style: normal; font-weight: 300; color: var(--muted); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 13.5px;
+      font-weight: 500; transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--text); color: #fff; border: none;
+      padding: 7px 18px; border-radius: 6px; font-size: 13.5px;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      font-family: inherit; transition: opacity .15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-device {
+      position: absolute;
+      right: -60px; top: 50%;
+      width: min(520px, 48vw);
+      opacity: 0.18;
+      pointer-events: none;
+      user-select: none;
+      will-change: transform;
+      transform: translateY(-54%);
+    }
+    .hero-device-caption {
+      position: absolute;
+      right: 28px; bottom: 28px;
+      font-size: 11px; color: var(--dim);
+      font-weight: 400; letter-spacing: 0.2px;
+      text-align: right;
+      pointer-events: none;
+    }
+    @media(max-width:768px){
+      .hero-device { opacity: 0.1; right: -80px; width: 60vw; }
+      .hero-device-caption { display: none; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      color: #059669; font-size: 12px; font-weight: 600;
+      padding: 5px 13px; border-radius: 100px; letter-spacing: 0.3px;
+      margin-bottom: 36px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; background: var(--green);
+      border-radius: 50%; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.35)} }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    .hero-badge { animation: float 3s ease-in-out infinite; }
+
+    .hero h1 {
+      font-size: clamp(44px, 7vw, 80px); font-weight: 900;
+      line-height: 1.04; letter-spacing: -2.5px; max-width: 880px;
+      margin-bottom: 22px; color: var(--text);
+    }
+    .hero h1 em { font-style: normal; color: var(--text); }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px); color: var(--muted);
+      max-width: 540px; line-height: 1.75; margin-bottom: 44px; font-weight: 400;
+    }
+
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 64px; }
+    .btn-primary {
+      background: var(--text); color: #fff; padding: 13px 28px;
+      border-radius: 8px; font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: opacity .15s, transform .1s;
+    }
+    .btn-primary:hover { opacity: 0.87; transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--text); padding: 13px 28px;
+      border-radius: 8px; font-size: 15px; font-weight: 500;
+      text-decoration: none; border: 1px solid var(--border2);
+      transition: border-color .15s, transform .1s;
+    }
+    .btn-secondary:hover { border-color: #9ca3af; transform: translateY(-1px); }
+
+    /* ─── STATS ─── */
+    .stats-section {
+      min-height: 100vh;
+      background: #0a0a0a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 80px 40px;
+      text-align: left;
+      position: relative; overflow: hidden;
+    }
+    #eeg-canvas {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.18; pointer-events: none;
+    }
+    .stats-inner { position: relative; z-index: 1; }
+    .stats-inner {
+      max-width: 860px; width: 100%;
+    }
+    .stats-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      margin-bottom: 64px;
+    }
+    .stats-headline {
+      font-size: clamp(32px, 5vw, 54px); font-weight: 800;
+      letter-spacing: -1.5px; line-height: 1.12;
+      color: #fff; margin-bottom: 72px; max-width: 640px;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item {
+      padding: 36px 0 36px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding-right: 40px; padding-left: 0;
+    }
+    .stat-item:not(:first-child) { padding-left: 40px; }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(44px, 6vw, 72px); font-weight: 900;
+      letter-spacing: -3px; line-height: 1; color: #fff;
+      margin-bottom: 14px;
+    }
+    .stat-desc {
+      font-size: 14px; color: rgba(255,255,255,0.35);
+      line-height: 1.65; font-weight: 400;
+    }
+    @media(max-width:640px){
+      .stats-section { padding: 72px 24px; text-align: left; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 32px 0; }
+      .stat-item:last-child { border-bottom: none; }
+      .stat-item:not(:first-child) { padding-left: 0; }
+    }
+
+    /* ─── METRICS STRIP ─── */
+    .metrics {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; max-width: 880px; width: 100%;
+    }
+    .metric {
+      flex: 1; min-width: 130px; padding: 22px 20px;
+      border-right: 1px solid var(--border); background: var(--surface);
+      text-align: center;
+    }
+    .metric:last-child { border-right: none; }
+    .metric-value {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.8px;
+      color: var(--text); line-height: 1; margin-bottom: 5px;
+    }
+    .metric-label {
+      font-size: 11px; color: var(--dim); font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+
+    /* ─── SHARED ─── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 96px 0; }
+    .section-tag {
+      font-size: 11.5px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--green); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 46px); font-weight: 800;
+      letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 14px;
+    }
+    .section-sub {
+      font-size: 16.5px; color: var(--muted); max-width: 520px;
+      line-height: 1.75; margin-bottom: 48px; font-weight: 400;
+    }
+
+    /* ─── DEMO WRAPPER ─── */
+    .demo-wrapper {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+    }
+    .demo-topbar {
+      display: flex; align-items: center; gap: 7px;
+      padding: 11px 18px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .demo-dot.r { background: #ff5f57; } .demo-dot.y { background: #febc2e; } .demo-dot.g { background: #28c840; }
+    .demo-titlebar { flex: 1; text-align: center; font-size: 11.5px; color: var(--dim); font-weight: 500; }
+
+    .chip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--surface2); }
+    .chip-pair-img { position: relative; overflow: hidden; }
+    .chip-pair-img img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .chip-pair-img .img-label {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(255,255,255,0.9); backdrop-filter: blur(6px);
+      padding: 4px 10px; border-radius: 5px; font-size: 11px;
+      color: var(--muted); font-weight: 500; border: 1px solid var(--border);
+    }
+    .chip-pair-img:first-child { border-right: 1px solid var(--border); }
+
+    .callouts {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; background: var(--border); border-top: 1px solid var(--border);
+    }
+    .callout { background: var(--bg); padding: 20px 24px; }
+    .callout + .callout { border-left: 1px solid var(--border); }
+    .callout-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--text); margin-bottom: 5px;
+    }
+    .callout-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ─── STEPS ─── */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0; background: var(--border);
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    }
+    .step { background: var(--bg); padding: 32px 28px; }
+    .step + .step { border-left: 1px solid var(--border); }
+    .step-num {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+    }
+    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 9px; letter-spacing: -0.3px; }
+    .step p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── TWO-COL ─── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    @media(max-width:768px){ .two-col { grid-template-columns: 1fr; } }
+    .product-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:900px){ .product-grid { grid-template-columns: 1fr; } }
+
+    .photo-card {
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border); background: var(--surface);
+      position: relative;
+    }
+    .photo-card img { width: 100%; display: block; }
+    .photo-card .photo-label {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(255,255,255,0.9); backdrop-filter: blur(6px);
+      padding: 5px 11px; border-radius: 5px; font-size: 11px;
+      color: var(--muted); font-weight: 500; border: 1px solid var(--border);
+    }
+
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table tr { border-bottom: 1px solid var(--border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td { padding: 13px 0; font-size: 13.5px; }
+    .spec-table td:first-child { color: var(--muted); font-weight: 500; }
+    .spec-table td:last-child { color: var(--text); font-weight: 700; text-align: right; }
+
+    /* ─── IN-VIVO ─── */
+    .invivo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:768px){ .invivo-layout { grid-template-columns: 1fr; } }
+
+    .invivo-left { display: flex; flex-direction: column; gap: 14px; }
+
+    .lab-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .lab-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .lab-card .card-body { padding: 18px 20px; }
+    .lab-card .card-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 5px;
+    }
+    .lab-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .rat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; position: relative;
+    }
+    .rat-card img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 430px; }
+    .rat-card .rat-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+      padding: 28px 22px 22px;
+    }
+    .rat-card .rat-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4);
+      color: #34d399; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px; letter-spacing: 0.4px;
+      text-transform: uppercase; margin-bottom: 9px;
+    }
+    .rat-card .rat-badge .dot {
+      width: 5px; height: 5px; background: #34d399;
+      border-radius: 50%; animation: pulse 2s infinite;
+    }
+    .rat-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.4px; color: #fff; }
+    .rat-card p { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.55; }
+
+    /* ─── RESULTS GRID ─── */
+    .results-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0; background: var(--border);
+      border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; margin-top: 36px;
+    }
+    .result-item { background: var(--bg); padding: 26px 22px; }
+    .result-item + .result-item { border-left: 1px solid var(--border); }
+    .result-value {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.6px;
+      color: var(--text); line-height: 1; margin-bottom: 5px;
+    }
+    .result-value span { color: var(--blue); }
+    .result-label { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    /* ─── TOOLING ─── */
+    .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 48px; }
+    @media(max-width:768px){ .tool-grid { grid-template-columns: 1fr; } }
+
+    .tool-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .tool-card img { width: 100%; display: block; object-fit: cover; height: 280px; background: #1a1a1a; }
+    .tool-card .tool-body { padding: 20px 22px; }
+    .tool-card .tool-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 6px;
+    }
+    .tool-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
+    .tool-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .tech-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 32px 36px;
+    }
+    .tech-block-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tech-block-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .tech-block p {
+      font-size: 13.5px; color: var(--text); line-height: 1.8;
+      margin-bottom: 18px; font-weight: 400;
+    }
+    .tech-block p:last-child { margin-bottom: 0; }
+
+    /* ─── COMPARE ─── */
+    .compare-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px; white-space: nowrap;
+    }
+    .compare-table th, .compare-table td {
+      padding: 10px 14px; border-bottom: 1px solid var(--border);
+      text-align: center; vertical-align: middle;
+    }
+    .compare-table th {
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      background: var(--surface); border-top: 1px solid var(--border);
+    }
+    .compare-table th.col-neurae, .compare-table td.col-neurae {
+      background: #eff6ff; color: var(--text); font-weight: 700;
+    }
+    .compare-table th.col-neurae { color: var(--blue); }
+    .compare-table .row-group td, .compare-table .row-group th {
+      font-weight: 700; font-size: 12px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--muted);
+      background: var(--surface); padding: 12px 14px 6px; text-align: left;
+      border-bottom: none;
+    }
+    .compare-table .row-label { text-align: left; color: var(--text); font-weight: 500; }
+    .compare-table .yes { color: #10b981; font-size: 15px; }
+    .compare-table .no  { color: var(--dim); font-size: 14px; }
+    .compare-table .highlight { color: var(--blue); font-weight: 800; }
+
+    /* ─── USE CASES ─── */
+    .use-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 14px; }
+    .use-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .use-card:hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .use-icon { font-size: 22px; margin-bottom: 12px; }
+    .use-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
+    .use-card p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── RESEARCH ─── */
+    .research-bar {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 26px 32px;
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    }
+    .ri-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--dim); font-weight: 600; white-space: nowrap;
+    }
+    .ri-divider { width: 1px; height: 32px; background: var(--border2); flex-shrink: 0; }
+    .pub-item { display: flex; flex-direction: column; gap: 2px; }
+    .pub-name { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .pub-conf { font-size: 12px; color: var(--muted); }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      text-align: center; padding: 100px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .cta-section h2 {
+      font-size: clamp(28px, 5vw, 52px); font-weight: 900;
+      letter-spacing: -1.5px; margin-bottom: 20px; line-height: 1.1;
+    }
+    .cta-section p { font-size: 17px; color: var(--muted); margin-bottom: 36px; }
+    .email-form {
+      display: flex; gap: 8px; justify-content: center;
+      flex-wrap: wrap; max-width: 460px; margin: 0 auto;
+    }
+    .email-form input {
+      flex: 1; min-width: 220px;
+      background: var(--bg); border: 1px solid var(--border2);
+      color: var(--text); padding: 13px 15px; border-radius: 8px;
+      font-size: 14.5px; outline: none; font-family: inherit;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .email-form input:focus {
+      border-color: #6b7280;
+      box-shadow: 0 0 0 3px rgba(107,114,128,0.1);
+    }
+    .email-form input::placeholder { color: var(--dim); }
+    .email-form button {
+      background: var(--text); color: #fff; border: none;
+      padding: 13px 24px; border-radius: 8px; font-size: 14.5px;
+      font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: opacity .15s;
+    }
+    .email-form button:hover { opacity: 0.85; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border); padding: 24px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 14px; background: var(--bg);
+    }
+    .f-logo { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+    .f-logo em { font-style: normal; font-weight: 300; color: var(--muted); }
+    .f-copy { font-size: 12.5px; color: var(--dim); }
+    .f-links { display: flex; gap: 22px; }
+    .f-links a { font-size: 12.5px; color: var(--muted); text-decoration: none; transition: color .15s; }
+    .f-links a:hover { color: var(--text); }
+
+    /* ─── DIVIDER ─── */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    @media(max-width:768px){
+      .steps { grid-template-columns: 1fr; }
+      .step + .step { border-left: none; border-top: 1px solid var(--border); }
+      .callouts { grid-template-columns: 1fr; }
+      .callout + .callout { border-left: none; border-top: 1px solid var(--border); }
+      .chip-pair { grid-template-columns: 1fr; }
+      .chip-pair-img img { height: 240px; }
+      .result-item + .result-item { border-left: none; border-top: 1px solid var(--border); }
+    }
+    @media(max-width:640px){
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">neurae</a>
+  <ul class="nav-links">
+    <li><a href="#product">Product</a></li>
+    <li><a href="#invivo">In-Vivo</a></li>
+    <li><a href="#software">Software</a></li>
+    <li><a href="#silicon">Silicon</a></li>
+    <li><a href="#compare">Compare</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta" onclick="event.preventDefault();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Request Demo</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="hero-device"
+       src="images/hero-device.png"
+       alt="" aria-hidden="true" />
+  <div class="hero-device-caption">Neuralink N1 implant</div>
+
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Trials ongoing
+  </div>
+  <h1>Stop seizures<br /><em>before they spread.</em></h1>
+  <p class="hero-sub">
+    Neurosurgery has spent decades removing things.<br />For the first time, we're looking to add something back.
+  </p>
+  <div class="hero-actions">
+    <a href="#product" class="btn-primary">See the Chip</a>
+    <a href="#invivo" class="btn-secondary">View Animal Studies</a>
+  </div>
+
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <canvas id="eeg-canvas"></canvas>
+  <div class="stats-inner">
+    <div class="stats-eyebrow">The problem</div>
+<div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">65M</div>
+        <div class="stat-desc">people live with epilepsy worldwide</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1 in 3</div>
+        <div class="stat-desc">find no relief from any drug ever made</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">$30B</div>
+        <div class="stat-desc">in annual economic burden in the U.S. alone</div>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute; bottom:28px; right:28px; font-size:11px; color:rgba(255,255,255,0.3); font-weight:500; letter-spacing:0.3px; pointer-events:none;">
+    Simulated neural activity
+  </div>
+</div>
+
+<hr class="section-divider" />
+
+<!-- PRODUCT -->
+<section id="product" style="min-height:100vh; display:flex; align-items:center; position:relative; overflow:hidden;">
+  <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Research prototype</div>
+  <img id="product-device"
+       src="images/product-device.png"
+       aria-hidden="true"
+       style="position:absolute; right:-380px; bottom:80px; width:140vw; max-width:1600px; opacity:0.13; filter:blur(4px); pointer-events:none; user-select:none; will-change:transform;" />
+  <div class="wrap" style="position:relative; z-index:1;">
+    <div style="margin-bottom:48px;">
+        <div class="section-tag">Where We Are</div>
+        <h2 class="section-title">Meet Neurae&#8482;<br />a neural processing layer.</h2>
+        <p class="section-sub" style="margin-bottom:0;">
+          Configurable, physician-monitored closed-loop neuromodulation for drug-resistant epilepsy. Built to detect, predict, and arrest seizures in real time, entirely on-device.
+        </p>
+    </div>
+
+    <div class="product-grid">
+      <div class="demo-wrapper">
+        <div class="demo-topbar">
+          <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        </div>
+        <div style="position:relative; overflow:hidden;">
+          <img src="images/chip-tray.png" alt="neurae chips on wafer tray" style="width:100%; height:360px; object-fit:cover; display:block;" />
+        </div>
+      </div>
+      <div class="demo-wrapper">
+        <div class="demo-topbar">
+          <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        </div>
+        <div style="position:relative; overflow:hidden;">
+          <img src="images/halo-die.avif" alt="neurae single die under microscope" style="width:100%; height:360px; object-fit:cover; display:block;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider" />
+
+<!-- IN-VIVO -->
+<section id="invivo" style="min-height:100vh;display:flex;align-items:center;position:relative;">
+  <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Final verifications</div>
+  <div class="wrap" style="width:100%;">
+    <div class="two-col">
+      <div style="border-radius:12px;overflow:hidden;background:#f5f5f5;border:1px solid #e8e8e8;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="roddent.jpg" alt="Rat with cortical implant - MD-Eid#4b" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;" />
+      </div>
+      <div>
+        <div class="section-tag">In-Vivo Studies</div>
+        <h2 class="section-title">Meet our<br />first patient!</h2>
+        <p class="section-sub">Validated at Yale School of Medicine using a custom closed-loop recording and stimulation toolchain.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" style="display:inline-flex;align-items:center;background:#000;border:1px solid #000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">See Results</button>
+          <button onclick="document.getElementById('invivo-modal').style.display='flex'" style="display:inline-flex;align-items:center;background:transparent;border:1px solid rgba(0,0,0,0.2);color:#000;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.05)';this.style.borderColor='rgba(0,0,0,0.4)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(0,0,0,0.2)'">Technical Specifications</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider" />
+
+<!-- SOFTWARE & VERIFICATION -->
+<section id="software" style="min-height:100vh;display:flex;align-items:center;position:relative;">
+  <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Tools provided</div>
+  <div class="wrap">
+    <div class="section-tag">Software</div>
+    <h2 class="section-title">Request a Demo.</h2>
+    <p class="section-sub">
+      Book a demo and download our open-source hardware stack. Built for seizure treatment verification.
+    </p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;">
+      <div style="border-radius:12px;overflow:hidden;border:1px solid #e8e8e8;background:#fff;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="images/intan-rhx.png" alt="Intan RHX Recording Controller" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;" />
+        <div style="padding:24px;">
+          <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Recording Software</div>
+          <h3 style="font-size:18px;font-weight:600;margin:0 0 8px;">Intan RHX</h3>
+          <p style="font-size:11.5px;color:rgba(0,0,0,0.4);margin:0 0 16px;">External provider via Intan SDK. Only required for real in-vivo testing.</p>
+          <a href="https://intantech.com/downloads.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;border:1px solid #e8e8e8;background:#fff;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="images/halo-reader.png" alt="HALO Reading Controller" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;" />
+        <div style="padding:24px;">
+          <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Analysis Software</div>
+          <h3 style="font-size:18px;font-weight:600;margin:0 0 8px;">HALO Reader</h3>
+          <p style="font-size:11.5px;color:rgba(0,0,0,0.4);margin:0 0 16px;">Not yet Apple certified. You may need to allow it in System Settings.</p>
+          <a href="downloads/HALOReader.dmg" download style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider" />
+
+<!-- SILICON -->
+<section id="silicon" style="min-height:100vh;background:#fff;display:flex;align-items:center;position:relative;">
+  <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Long-term goals</div>
+  <div class="wrap" style="width:100%;">
+    <div class="two-col">
+      <div style="border-radius:12px;overflow:hidden;background:#f5f5f5;border:1px solid #e8e8e8;">
+        <div style="background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+        </div>
+        <img src="https://news.yale.edu/sites/default/files/bci-image-03-04_combined.png" alt="Yale BCI chip" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;" />
+      </div>
+      <div>
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">Our Edge</div>
+        <h2 class="section-title" style="color:#000;">We Build Reconfigurable Architecture.</h2>
+        <p class="section-sub" style="margin-bottom:32px;color:rgba(0,0,0,0.5);font-weight:400;line-height:2;">
+          We aim to research and design silicon and packaging solutions that shift from fixed-function to general-purpose architectures, tackling larger amounts of neural throughput under stringent FDA power constraints.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider" />
+
+<!-- USE CASES -->
+
+
+<!-- COMPARE -->
+<section id="compare" style="position:relative;">
+  <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Yale-based research</div>
+  <div class="wrap">
+    <div class="section-tag">Competitive Landscape</div>
+    <h2 class="section-title">Built different.<br />By design.</h2>
+    <p class="section-sub">The only reconfigurable BCI with full on-chip compute<br/>and closed-loop capability.</p>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="text-align:left; min-width:160px;"></th>
+            <th>Medtronic</th>
+            <th>NeuroPace</th>
+            <th>Aziz</th>
+            <th>Kassiri</th>
+            <th>Neuralink</th>
+            <th>NURIP</th>
+            <th>Blackrock</th>
+            <th>Synchron</th>
+            <th class="col-neurae">neurae</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-group"><td colspan="10">Tasks Supported</td></tr>
+          <tr>
+            <td class="row-label">Spike Detection</td>
+            <td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Compression</td>
+            <td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Seizure Prediction</td>
+            <td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Movement Intent</td>
+            <td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Encryption</td>
+            <td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+
+          <tr class="row-group"><td colspan="10">Technical Capabilities</td></tr>
+          <tr>
+            <td class="row-label">Programmable</td>
+            <td><span class="yes">✓</span></td><td>Limited</td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td>Limited</td><td>Limited</td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="highlight">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Read Channels</td>
+            <td>4</td><td>8</td><td>256</td><td>24</td><td>3072</td><td>32</td><td>96</td><td>16</td>
+            <td class="col-neurae"><span class="highlight">96</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Data Rate (Mbps)</td>
+            <td>0.01</td><td>0.02</td><td>9.76</td><td>1.32</td><td>545</td><td>0.13</td><td>30</td><td>0.5</td>
+            <td class="col-neurae"><span class="highlight">46</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Power (mW)</td>
+            <td>2</td><td>6.5</td><td>12</td><td>8</td><td>20</td><td>10</td><td>15</td><td>10</td>
+            <td class="col-neurae"><span class="highlight">15</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Safety (&lt;15 mW)</td>
+            <td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Architecture</td>
+            <td>Fixed</td><td>Fixed</td><td>Fixed</td><td>Reconfig.</td><td>Fixed</td><td>Fixed</td><td>Fixed</td><td>Fixed</td>
+            <td class="col-neurae"><span class="highlight">GALS</span></td>
+          </tr>
+
+          <tr class="row-group"><td colspan="10">Processing</td></tr>
+          <tr>
+            <td class="row-label">On-chip Processing</td>
+            <td>Limited</td><td>Limited</td><td><span class="no">✕</span></td><td>Limited</td><td><span class="no">✕</span></td><td>Limited</td><td><span class="no">✕</span></td><td>Limited</td>
+            <td class="col-neurae"><span class="highlight">Full</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Closed-loop</td>
+            <td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="no">✕</span></td>
+            <td class="col-neurae"><span class="yes">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <h2>Ready to stop<br />the next seizure?</h2>
+  <p>We're working with select neurology centers, research labs, and neurotech investors.</p>
+  <div class="email-form">
+    <input id="access-email" type="email" placeholder="you@hospital.org" />
+    <button type="button" onclick="(function(){var e=document.getElementById('access-email').value;if(!e)return;window.location.href='mailto:neurae@hello.org?subject=Access Request&body=Request from: '+encodeURIComponent(e);})()">Request Access</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">neurae</div>
+  <div class="f-links">
+    <a href="mailto:neurae@hello.org">neurae@hello.org</a>
+  </div>
+  <div class="f-copy">© 2026 neurae, Inc.</div>
+</footer>
+
+<script>
+  (function () {
+    const canvas = document.getElementById('eeg-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const SPEED = 1.8, SWEEP_W = 10;
+    let x = 0, prevY = 0, t = 0;
+    let seizureOn = false, seizureLeft = 0, nextSeizure = 280 + Math.random() * 120;
+
+    function signal() {
+      const cy = canvas.height * 0.5;
+      if (seizureOn) {
+        const a = canvas.height * 0.28;
+        return cy + a * (Math.sin(t*0.9)*0.55 + Math.sin(t*1.7)*0.28 + Math.sin(t*3.1)*0.12 + (Math.random()-0.5)*0.25);
+      }
+      const a = canvas.height * 0.055;
+      return cy + a * (Math.sin(t*0.13)*0.45 + Math.sin(t*0.29)*0.30 + Math.sin(t*0.61)*0.18 + (Math.random()-0.5)*0.55);
+    }
+
+    prevY = canvas.height * 0.5;
+
+    function frame() {
+      // Erase sweep ahead
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(x, 0, SWEEP_W, canvas.height);
+
+      // Red detection region during seizure
+      if (seizureOn) {
+        ctx.fillStyle = 'rgba(239,68,68,0.35)';
+        ctx.fillRect(x - SPEED, 0, SPEED + 1, canvas.height);
+      }
+
+      const y = signal();
+      ctx.beginPath();
+      ctx.moveTo(x - SPEED, prevY);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = seizureOn ? 'rgba(52,211,153,1)' : 'rgba(16,185,129,0.75)';
+      ctx.lineWidth = seizureOn ? 2.2 : 1.6;
+      ctx.stroke();
+
+      prevY = y; t += 0.38; x += SPEED;
+      if (x >= canvas.width) x = 0;
+      if (seizureOn) { if (--seizureLeft <= 0) { seizureOn = false; nextSeizure = 320 + Math.random() * 180; } }
+      else           { if (--nextSeizure <= 0) { seizureOn = true;  seizureLeft = 100 + Math.random() * 80; } }
+      requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+
+  (function () {
+    const device = document.querySelector('.hero-device');
+    if (!device) return;
+
+    const BASE_OFFSET = -54; // percent — matches initial CSS translateY
+    const STRENGTH = 0.28;   // parallax depth: lower = more distant feel
+
+    function update() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const shift = scrollY * STRENGTH;
+      device.style.transform = 'translateY(calc(' + BASE_OFFSET + '% - ' + shift + 'px))';
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () { update(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    update();
+  })();
+
+  (function () {
+    const el = document.getElementById('product-device');
+    if (!el) return;
+    const section = document.getElementById('product');
+    const STRENGTH = 0.06;
+
+    function update() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const sectionTop = section.offsetTop;
+      const relative = scrollY - sectionTop;
+      const shift = relative * STRENGTH;
+      el.style.transform = 'translateY(' + (-shift) + 'px)';
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () { update(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    update();
+  })();
+</script>
+
+
+<!-- TECH SPEC MODAL -->
+<div id="tech-spec-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:16px;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;padding:40px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <h3 style="color:#fff;font-size:18px;font-weight:600;margin:0;">Technical Specifications</h3>
+      <button onclick="document.getElementById('tech-spec-modal').style.display='none'" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <div style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.75;display:flex;flex-direction:column;gap:20px;">
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Pipeline Overview</strong>Neural recordings from each electrode, implanted directly into brain tissue, are sampled using 16-bit ADCs and transferred from the host computer to the FPGA in Intan-defined, fixed-size, channel-interleaved data blocks. The designed pipeline collects this data using a proprietary RHD format and streams it to the seizure-detection hardware (RTL) implementation under test. The runtime outputs are collected on the host in a timestamp-bounded event format that marks seizure start and end boundaries for further in-vivo verification. Upon detection, charge-balanced biphasic stimulation pulses are delivered back through the implanted electrodes, disrupting cortical synchrony and interrupting the seizure before it generalizes.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Seizure Processing</strong>The RTL implementation decomposes seizure detection into a deeply pipelined, multi-stage datapath optimized for hardware concurrency and per-channel independence. Seizure detection consists of three independent modules (NEO, THR, and GATE) that perform fixed-point arithmetic and threshold evaluation at a single-sample-per-clock throughput per channel. First, each channel maintains a dedicated sliding-window, three-sample history buffer used to compute the nonlinear energy operator (NEO), a signal transformation that highlights transient oscillatory activity associated with seizure onset. Downstream of the configurable threshold (THR), which marks high-oscillation detections, a gating state machine tracks detection persistence over time using configurable transition counters and inactivity windows. This logic converts transient, sample-level detections into temporally bounded seizure events while preserving channel-level isolation. The modular separation between peripheral communication logic and datapath computation allows independent timing closure and facilitates future migration toward an ASIC-based physical design pipeline without a PC in the loop.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Software Stack</strong>We implement a host-side software stack that complements the hardware processing by providing configuration management and post-processing visualization. A graphical user interface enables runtime parameter tuning, batch file processing, and visualization of detection intervals across channels and recording sessions. Hardware-generated event packets are decoded and organized into structured output files that allow cross-referencing between detected seizure regions and raw waveform recordings.</p>
+    </div>
+  </div>
+</div>
+
+<!-- INVIVO MODAL -->
+<div id="invivo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:16px;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;padding:40px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <h3 style="color:#fff;font-size:18px;font-weight:600;margin:0;">Technical Specifications</h3>
+      <button onclick="document.getElementById('invivo-modal').style.display='none'" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <div style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.75;display:flex;flex-direction:column;gap:20px;">
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Pipeline Overview</strong>Neural recordings from each electrode, implanted directly into brain tissue, are sampled using 16-bit ADCs and transferred from the host computer to the FPGA in Intan-defined, fixed-size, channel-interleaved data blocks. The designed pipeline collects this data using a proprietary RHD format and streams it to the seizure-detection hardware (RTL) implementation under test. The runtime outputs are collected on the host in a timestamp-bounded event format that marks seizure start and end boundaries for further in-vivo verification. Upon detection, charge-balanced biphasic stimulation pulses are delivered back through the implanted electrodes, disrupting cortical synchrony and interrupting the seizure before it generalizes.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Seizure Processing</strong>The RTL implementation decomposes seizure detection into a deeply pipelined, multi-stage datapath optimized for hardware concurrency and per-channel independence. Seizure detection consists of three independent modules (NEO, THR, and GATE) that perform fixed-point arithmetic and threshold evaluation at a single-sample-per-clock throughput per channel. First, each channel maintains a dedicated sliding-window, three-sample history buffer used to compute the nonlinear energy operator (NEO), a signal transformation that highlights transient oscillatory activity associated with seizure onset. Downstream of the configurable threshold (THR), which marks high-oscillation detections, a gating state machine tracks detection persistence over time using configurable transition counters and inactivity windows. This logic converts transient, sample-level detections into temporally bounded seizure events while preserving channel-level isolation. The modular separation between peripheral communication logic and datapath computation allows independent timing closure and facilitates future migration toward an ASIC-based physical design pipeline without a PC in the loop.</p>
+      <p><strong style="color:#fff;display:block;margin-bottom:6px;">Software Stack</strong>We implement a host-side software stack that complements the hardware processing by providing configuration management and post-processing visualization. A graphical user interface enables runtime parameter tuning, batch file processing, and visualization of detection intervals across channels and recording sessions. Hardware-generated event packets are decoded and organized into structured output files that allow cross-referencing between detected seizure regions and raw waveform recordings.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
