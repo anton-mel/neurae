@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>neuræ — Funding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      width: 100%;
+      max-width: 1000px;
+      padding: 80px 80px;
+    }
+    .eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: #10b981;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      font-weight: 900;
+      letter-spacing: -2.5px;
+      line-height: 1.0;
+      margin-bottom: 48px;
+    }
+    .budget-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .budget-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+    }
+    .b-name { font-size: 16px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 4px; }
+    .b-desc { font-size: 13px; color: rgba(255,255,255,0.35); }
+    .b-amount { font-size: 22px; font-weight: 700; color: #10b981; white-space: nowrap; margin-left: 32px; }
+    .budget-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .t-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .t-amount { font-size: 28px; font-weight: 900; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="eyebrow">What We're Raising</div>
+    <h1 style="font-size:clamp(24px,3.5vw,42px);letter-spacing:-1.5px;margin-bottom:16px;">Early-stage. Verified in-vivo.</h1>
+    <p style="font-size:15px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:760px;margin-bottom:12px;">
+      Our rodent pipeline demonstrates a <span style="color:#10b981;font-weight:600;">median 62% seizure reduction</span> at 3-month treatment. Happy to demo results over a call. NeuroPace long-term data shows <span style="color:rgba(255,255,255,0.7);font-weight:600;">35% of patients achieve seizure reduction</span>. We are actively hiring for IACUC-approved rodent experiments and exploring physical AI for brain processing. We are raising first funds to establish an independent research foundation and acquire prime equipment:
+    </p>
+    <div class="budget-row" style="margin-top:28px;">
+      <div class="budget-item">
+        <div>
+          <div class="b-name">Intan RHD Recording System</div>
+          <div class="b-desc">Required for real in-vivo neural recording. The ground truth data source.</div>
+        </div>
+        <div class="b-amount">$14,250</div>
+      </div>
+      <div class="budget-item">
+        <div>
+          <div class="b-name">FPGA Prototyping Hardware</div>
+          <div class="b-desc">Xilinx Ultrascale+ boards + tooling licenses for RTL validation</div>
+        </div>
+        <div class="b-amount">~$8,000</div>
+      </div>
+      <div class="budget-item">
+        <div>
+          <div class="b-name">First Chip Tapeout</div>
+          <div class="b-desc">Skywater 130nm via Efabless or TSMC 28nm shuttle run. First neuræ ASIC.</div>
+        </div>
+        <div class="b-amount">~$25,000</div>
+      </div>
+      <div class="budget-item">
+        <div>
+          <div class="b-name">EDA Tooling & Infrastructure</div>
+          <div class="b-desc">Cadence licenses, PDKs, lab access, and operational overhead</div>
+        </div>
+        <div class="b-amount">~$12,000</div>
+      </div>
+    </div>
+    <div class="budget-total">
+      <div class="t-name">Total Ask</div>
+      <div class="t-amount">~$59,250</div>
+    </div>
+  </div>
+</body>
+</html>
