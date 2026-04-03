@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>neurae — Stop Seizures Before They Spread</title>
+  <title>neuræ — Stop Seizures Before They Spread</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,7 +41,11 @@
       padding: 0 48px; height: 56px;
       background: rgba(255,255,255,0.92);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: transform;
     }
     .nav-logo {
       font-size: 17px; font-weight: 700; letter-spacing: -0.4px;
@@ -153,7 +157,7 @@
       max-width: 860px; width: 100%;
     }
     .stats-eyebrow {
-      font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+      font-size: 16px; font-weight: 600; letter-spacing: 2.5px;
       text-transform: uppercase; color: rgba(255,255,255,0.25);
       margin-bottom: 64px;
     }
@@ -179,7 +183,7 @@
       margin-bottom: 14px;
     }
     .stat-desc {
-      font-size: 14px; color: rgba(255,255,255,0.35);
+      font-size: 16px; color: rgba(255,255,255,0.35);
       line-height: 1.65; font-weight: 400;
     }
     @media(max-width:640px){
@@ -215,7 +219,7 @@
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
     section { padding: 96px 0; }
     .section-tag {
-      font-size: 11.5px; font-weight: 700; letter-spacing: 1.5px;
+      font-size: 16px; font-weight: 700; letter-spacing: 1.5px;
       text-transform: uppercase; color: var(--green); margin-bottom: 12px;
     }
     .section-title {
@@ -223,7 +227,7 @@
       letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 14px;
     }
     .section-sub {
-      font-size: 16.5px; color: var(--muted); max-width: 520px;
+      font-size: 16px; color: var(--muted); max-width: 520px;
       line-height: 1.75; margin-bottom: 48px; font-weight: 400;
     }
 
@@ -283,7 +287,14 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
     @media(max-width:768px){ .two-col { grid-template-columns: 1fr; } }
     .product-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    @media(max-width:900px){ .product-grid { grid-template-columns: 1fr; } }
+    @media(max-width:900px){ .product-grid { grid-template-columns: 1fr; } .demo-wrapper-second { display: none; } }
+    .mobile-underline { text-decoration: none; }
+    .mobile-br { display: none; }
+    @media(max-width:900px) {
+      .mobile-underline { text-decoration: underline; }
+      .mobile-br { display: block; }
+      .tool-note { max-width: 100% !important; width: 100% !important; }
+    }
 
     .photo-card {
       border-radius: 12px; overflow: hidden;
@@ -526,7 +537,7 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">neurae</a>
+  <a class="nav-logo" href="#">neuræ</a>
   <ul class="nav-links">
     <li><a href="#product">Product</a></li>
     <li><a href="#invivo">In-Vivo</a></li>
@@ -550,7 +561,7 @@
   </div>
   <h1>Stop seizures<br /><em>before they spread.</em></h1>
   <p class="hero-sub">
-    Neurosurgery has spent decades removing things.<br />For the first time, we're looking to add something back.
+    Neurosurgery has spent<span class="mobile-br"></span> decades <span class="mobile-underline">removing</span> things.<br />For the first time, we're looking<span class="mobile-br"></span> to <span class="mobile-underline">add</span> something back.
   </p>
   <div class="hero-actions">
     <a href="#product" class="btn-primary">See the Chip</a>
@@ -611,7 +622,7 @@
           <img src="images/chip-tray.png" alt="neurae chips on wafer tray" style="width:100%; height:360px; object-fit:cover; display:block;" />
         </div>
       </div>
-      <div class="demo-wrapper">
+      <div class="demo-wrapper demo-wrapper-second">
         <div class="demo-topbar">
           <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
         </div>
@@ -675,7 +686,7 @@
         <div style="padding:24px;">
           <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Recording Software</div>
           <h3 style="font-size:18px;font-weight:600;margin:0 0 8px;">Intan RHX</h3>
-          <p style="font-size:11.5px;color:rgba(0,0,0,0.4);margin:0 0 16px;">External provider via Intan SDK. Only required for real in-vivo testing.</p>
+          <p class="tool-note" style="font-size:14px;color:rgba(0,0,0,0.4);margin:0 0 16px;max-width:70%;width:70%;">External provider via Intan SDK. Only required for real in-vivo testing.</p>
           <a href="https://intantech.com/downloads.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download
@@ -691,8 +702,8 @@
         <img src="images/halo-reader.png" alt="HALO Reading Controller" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;" />
         <div style="padding:24px;">
           <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Analysis Software</div>
-          <h3 style="font-size:18px;font-weight:600;margin:0 0 8px;">HALO Reader</h3>
-          <p style="font-size:11.5px;color:rgba(0,0,0,0.4);margin:0 0 16px;">Not yet Apple certified. You may need to allow it in System Settings.</p>
+          <h3 style="font-size:18px;font-weight:600;margin:0 0 8px;">Neuræ Reader</h3>
+          <p class="tool-note" style="font-size:14px;color:rgba(0,0,0,0.4);margin:0 0 16px;max-width:70%;width:70%;">Not yet Apple certified. You may need to allow it in System Settings.</p>
           <a href="downloads/HALOReader.dmg" download style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download
@@ -756,7 +767,7 @@
             <th>NURIP</th>
             <th>Blackrock</th>
             <th>Synchron</th>
-            <th class="col-neurae">neurae</th>
+            <th class="col-neurae">neuræ</th>
           </tr>
         </thead>
         <tbody>
@@ -848,11 +859,11 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="f-logo">neurae</div>
+  <div class="f-logo">neuræ</div>
   <div class="f-links">
     <a href="mailto:neurae@hello.org">neurae@hello.org</a>
   </div>
-  <div class="f-copy">© 2026 neurae, Inc.</div>
+  <div class="f-copy">© 2026 neuræ, Inc.</div>
 </footer>
 
 <script>
@@ -861,8 +872,12 @@
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    let lastW = 0;
     function resize() {
-      canvas.width  = canvas.offsetWidth;
+      const w = canvas.offsetWidth;
+      if (w === lastW) return;
+      lastW = w;
+      canvas.width  = w;
       canvas.height = canvas.offsetHeight;
       ctx.fillStyle = '#0a0a0a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
