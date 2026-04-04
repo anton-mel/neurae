@@ -541,6 +541,7 @@
   <ul class="nav-links">
     <li><a href="#product">Product</a></li>
     <li><a href="#invivo">In-Vivo</a></li>
+    <li><a href="#whynow">Why Now</a></li>
     <li><a href="#software">Software</a></li>
     <li><a href="#silicon">Silicon</a></li>
     <li><a href="#compare">Compare</a></li>
@@ -639,6 +640,7 @@
 <!-- IN-VIVO -->
 <section id="invivo" style="min-height:100vh;display:flex;align-items:center;position:relative;">
   <div style="position:absolute;bottom:28px;right:28px;font-size:11px;color:rgba(0,0,0,0.25);font-weight:500;letter-spacing:0.3px;pointer-events:none;">Final verifications</div>
+  <img src="images/yale-med-logo.png" alt="Yale School of Medicine" style="position:absolute;top:20px;right:20px;width:52px;opacity:0.55;pointer-events:none;user-select:none;" />
   <div class="wrap" style="width:100%;">
     <div class="two-col">
       <div style="border-radius:12px;overflow:hidden;background:#f5f5f5;border:1px solid #e8e8e8;">
@@ -652,7 +654,7 @@
       <div>
         <div class="section-tag">In-Vivo Studies</div>
         <h2 class="section-title">Meet our<br />first patient!</h2>
-        <p class="section-sub"><strong>Validated at Yale School of Medicine</strong> using a custom closed-loop recording and stimulation toolchain.</p>
+        <p class="section-sub"><strong>Validated at Yale School of Medicine</strong> using a custom closed-loop recording and stimulation toolchain. We are now moving to primate studies.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" style="display:inline-flex;align-items:center;background:#000;border:1px solid #000;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='#222'" onmouseout="this.style.background='#000'">See Results</button>
           <button onclick="document.getElementById('invivo-modal').style.display='flex'" style="display:inline-flex;align-items:center;background:transparent;border:1px solid rgba(0,0,0,0.2);color:#000;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.05)';this.style.borderColor='rgba(0,0,0,0.4)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(0,0,0,0.2)'">Technical Specifications</button>
@@ -662,6 +664,69 @@
 
   </div>
 </section>
+
+<hr class="section-divider" />
+
+<!-- WHY NOW -->
+<section id="whynow" style="min-height:100vh;background:#0a0a0a;color:#fff;display:flex;align-items:center;padding:100px 0;">
+  <div class="wrap" style="width:100%;">
+    <div style="font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;">The Evidence</div>
+    <h2 style="font-size:clamp(26px,4vw,46px);font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-bottom:20px;color:#fff;max-width:760px;">Why other approaches fall short. Why intervention <span style="color:#34d399;">saves lives.</span></h2>
+    <p style="font-size:16px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:700px;margin-bottom:56px;font-weight:400;">
+      Despite 40 years and 30+ drugs, the 1-in-3 drug-resistant rate has not moved. New drugs like cenobamate help some patients, but a large persistent population remains unreachable by pharmacology alone. Non-invasive technologies like focused ultrasound are promising but remain in Phase I trials with no FDA approval for epilepsy. For this population, closed-loop implantable neuromodulation is the <span style="color:#34d399;">only evidence-backed solution available today.</span>
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;">
+
+      <!-- Card 1 -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:12px;padding:28px 26px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.30);margin-bottom:14px;">Pharmacology</div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:12px;letter-spacing:-0.3px;color:#fff;">Drugs have hit a ceiling</h3>
+        <p style="font-size:13.5px;color:rgba(255,255,255,0.50);line-height:1.7;margin-bottom:16px;">
+          Despite approximately 30 licensed anti-seizure medications, the proportion of drug-resistant patients has remained at 30–40% since 1982. New drugs treat symptoms, not causes. Tolerance and cross-resistance mean the ceiling is structural, not incremental.
+        </p>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/29279892/" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:#34d399;text-decoration:underline;line-height:1.5;display:block;">
+          Kwan et al., JAMA Neurology 2018 ↗
+        </a>
+      </div>
+
+      <!-- Card 2 -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:12px;padding:28px 26px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.30);margin-bottom:14px;">Non-Invasive</div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:12px;letter-spacing:-0.3px;color:#fff;">Non-invasive tech is 10-15 years out. And it won't reach everyone.</h3>
+        <p style="font-size:13.5px;color:rgba(255,255,255,0.50);line-height:1.7;margin-bottom:16px;">
+          Focused ultrasound (tFUS) is in Phase I safety trials today. Realistically, FDA approval for epilepsy is a decade away at minimum. More importantly, even an approved tFUS device will not serve the full drug-resistant population.
+        </p>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41351627/" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:#34d399;text-decoration:underline;line-height:1.5;display:block;">
+          Premaratne et al., J. Neurology 2025 ↗
+        </a>
+      </div>
+
+      <!-- Card 3 -->
+      <div style="background:rgba(16,185,129,0.07);border:1px solid #10b981;border-radius:12px;padding:28px 26px;animation:floatCard 3s ease-in-out infinite;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#34d399;margin-bottom:14px;">Implants</div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:12px;letter-spacing:-0.3px;color:#fff;">Implants work. They save lives.</h3>
+        <p style="font-size:13.5px;color:rgba(255,255,255,0.60);line-height:1.7;margin-bottom:16px;">
+          Responsive neurostimulation and closed-loop DBS are FDA-approved and reduce seizures in patients who have exhausted all other options. For refractory epilepsy, implantable devices represent the last and most effective intervention before the patient faces permanent disability or death.
+        </p>
+        <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpma/pma.cfm?id=p100026" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:#34d399;text-decoration:underline;line-height:1.5;display:block;">
+          NeuroPace RNS FDA Approval ↗
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  @media(max-width:768px){
+    #whynow > .wrap > div[style*="grid-template-columns:repeat(3,1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
 
 <hr class="section-divider" />
 
@@ -731,7 +796,7 @@
         <img src="https://news.yale.edu/sites/default/files/bci-image-03-04_combined.png" alt="Yale BCI chip" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;" />
       </div>
       <div>
-        <div style="font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">Our Edge</div>
+        <div style="font-size:16px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">Our Edge</div>
         <h2 class="section-title" style="color:#000;">We Build Reconfigurable Architecture.</h2>
         <p class="section-sub" style="margin-bottom:32px;color:rgba(0,0,0,0.5);font-weight:400;line-height:2;">
           We aim to research and design silicon and packaging solutions that shift from fixed-function to <strong>general-purpose</strong> architectures, tackling larger amounts of neural throughput under stringent FDA power constraints. Long-term, we are exploring the tapeout of small-parameter AI models directly onto neural silicon.
